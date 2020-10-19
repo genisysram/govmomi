@@ -2,6 +2,9 @@
 # Ubuntu Linux distribution "Xenial Xerus" release.
 os:             linux
 dist:           xenial
+arch:
+    - amd64
+    - ppc64le
 
 # Disable sudo for all builds by default. This ensures all jobs use
 # Travis-CI's containerized build environment unless specified otherwise.
