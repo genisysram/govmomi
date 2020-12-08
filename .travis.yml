@@ -37,7 +37,17 @@ jobs:
 
     - <<:            *lint-stage
       env:           LINTER=goimports
+#Adding ppc64le code
+ # The "lint" stage runs the various linters against the project.
+    - &lint-stage
+      stage:         lint
+      env:           LINTER=govet
+      install:       true
+      script:        make "${LINTER}"
 
+    - <<:            *lint-stage
+      env:           LINTER=goimports
+      arch:          ppc64le 
     # The "build" stage verifies the program can be built against the
     # various GOOS and GOARCH combinations found in the Go releaser
     # config file, ".goreleaser.yml".
@@ -64,6 +74,33 @@ jobs:
       env:           GOOS=windows GOARCH=amd64
     - <<:            *build-stage
       env:           GOOS=windows GOARCH=386
+# Adding ppc64le code
+ # The "build" stage verifies the program can be built against the
+    # various GOOS and GOARCH combinations found in the Go releaser
+    # config file, ".goreleaser.yml".
+    - &build-stage
+      stage:         build
+      env:           GOOS=linux GOARCH=amd64
+      install:       true
+      script:        make install
+
+    - <<:            *build-stage
+      env:           GOOS=linux   GOARCH=ppc64le
+
+    - <<:            *build-stage
+      env:           GOOS=darwin  GOARCH=ppc64le
+    - <<:            *build-stage
+      env:           GOOS=darwin  GOARCH=ppc64le
+
+    - <<:            *build-stage
+      env:           GOOS=freebsd GOARCH=ppc64le
+    - <<:            *build-stage
+      env:           GOOS=freebsd GOARCH=ppc64le
+
+    - <<:            *build-stage
+      env:           GOOS=windows GOARCH=ppc64le
+    - <<:            *build-stage
+      env:           GOOS=windows GOARCH=ppc64le
 
     # The test stage executes the test target.
     - stage:         test
